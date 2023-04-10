@@ -18,3 +18,20 @@ output "dev-subnet-id" { value = aws_subnet.dev-subnet-1.id }
 data "aws_vpc" "existing_vpc" { default = true }
 
 resource "aws_subnet" "dev-subnet-2" { vpc_id = data.aws_vpc.existing_vpc.id cidr_block = "172.31.48.0/20" availability_zone = "eu-west-3a" tags = { Name = "subnet-2-default" }
+esource "aws_fis_experiment_template" "example" {
+  description = "example"
+  role_arn    = aws_iam_role.example.arn
+
+  stop_condition {
+    source = "none"
+  }
+
+  action {
+    name      = "example-action"
+    action_id = "aws:ec2:terminate-instances"
+
+    target {
+      key   = "Instances"
+      value = "example-target"
+    }
+  }
